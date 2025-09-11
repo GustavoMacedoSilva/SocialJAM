@@ -1,4 +1,6 @@
+import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes_user import router as user_router
 from app.api.routes_artist import router as artist_router
 from app import models
@@ -10,10 +12,21 @@ app = FastAPI(
     description="API para socializar baseado no seu gosto musical",
 )
 
+origins = [
+    "http://localhost:5173"
+]
+
+# adds the cors middleware responsible to menage the conection betwen front-end and back-end
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 models.base.metadata.create_all(engine)
 app.include_router(user_router)
 app.include_router(artist_router)
 
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run("main:app", port=8000, reload=True)
