@@ -1,0 +1,1 @@
+# Arquivo para indicar que tests é um pacote Python
