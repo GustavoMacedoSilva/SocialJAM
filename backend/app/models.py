@@ -18,3 +18,14 @@ class Artist(base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     nome = Column(String)
     music_genre = Column(String)
+    albums = relationship("Album", back_populates="criador")
+    
+class Album(base):
+    __tablename__ = 'album'
+    
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    nome = Column(String)
+    total_tracks = Column(Integer)
+    artist_id = Column(Integer, ForeignKey('artist.id'))
+    
+    criador = relationship("Artist", back_populates="albums")

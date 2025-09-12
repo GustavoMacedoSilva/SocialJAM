@@ -18,6 +18,13 @@ class Artist(BaseModel):
     nome: str
     music_genre: str
     
+    
+class Album(BaseModel):
+    nome:str
+    total_tracks: int
+    artist_id : int
+    
 class ShowArtist(Artist):
+    albums: List[Album]
     class Config:
-        orm_mode = True
+        orm_mode=True

@@ -1,4 +1,5 @@
 import uvicorn
+from app.api.routes_album import router as album_router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes_user import router as user_router
@@ -27,6 +28,7 @@ app.add_middleware(
 models.base.metadata.create_all(engine)
 app.include_router(user_router)
 app.include_router(artist_router)
+app.include_router(album_router)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", port=8000, reload=True)
