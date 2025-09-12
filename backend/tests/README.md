@@ -1,6 +1,6 @@
 # Testes Unitários - SocialJAM Backend
 
-Este diretório contém 9 testes unitários abrangentes para o backend do projeto SocialJAM, cobrindo as funcionalidades das entidades **Album**.
+Este diretório contém 10 testes unitários abrangentes para o backend do projeto SocialJAM, cobrindo as funcionalidades das entidades **Album**, **User**.
 
 ## Estrutura dos Testes
 
@@ -11,6 +11,7 @@ tests/
 ├── __init__.py              # Pacote Python
 ├── conftest.py              # Configurações e fixtures compartilhadas
 └── test_album.py            # 3 testes principais + 2 adicionais para Album
+└── test_user.py            # 3 testes principais + 2 adicionais para User
 ```
 
 ## Testes Implementados
@@ -21,6 +22,13 @@ tests/
 3. **test_get_album_by_name** - Buscar álbum por nome
 4. **test_get_nonexistent_album_returns_404** - Buscar álbum inexistente (404)
 5. **test_album_artist_relationship** - Relacionamento entre artista e álbuns
+
+### 👤 User (test_user.py)
+1. **test_create_user_success** - Criação bem-sucedida de usuário no modelo
+2. **test_create_user_api_success** - Criação de usuário via API
+3. **test_get_user_by_username** - Buscar usuário por username
+4. **test_get_nonexistent_user_returns_404** - Buscar usuário inexistente (404)
+5. **test_create_user_with_duplicate_username** - Validação de username único
 
 ## Como Executar
 
@@ -74,10 +82,10 @@ uv run pytest tests/ --cov=app --cov-report=html
 ## Resultados
 
 ```
-================================= 5 passed, 4 warnings in 1.78s =================================
+================================= 10 passed, 4 warnings in 2.32s =================================
 ```
 
-Todos os 5 testes passaram com sucesso, garantindo a qualidade e confiabilidade do código backend.
+Todos os 10 testes passaram com sucesso, garantindo a qualidade e confiabilidade do código backend.
 
 ## Dependências de Teste
 
