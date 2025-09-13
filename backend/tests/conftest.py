@@ -2,6 +2,9 @@
 Configurações e fixtures para testes do backend SocialJAM
 """
 import pytest
+import pytest_asyncio
+import asyncio
+from motor.motor_asyncio import AsyncIOMotorClient
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -13,6 +16,8 @@ from main import app
 
 # Configuração do banco de dados de teste em memória
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
+TEST_MONGO_URI = 'mongodb://localhost:27017'
+TESTE_DB_NAME = 'SocialJAM_TEST'
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
@@ -22,6 +27,23 @@ engine = create_engine(
 
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+# create a loop to deal with async functions
+@pytest.fixture(scope='session')
+def event_loop():
+    # Allows you to run asynchronous tests with pytest-asyncio
+    loop = asyncio.get_event_loop()
+    yield loop
+    loop.close()
+
+# fixture for the mongoDB connection using a test db
+@pytest_asyncio.fixture(scope="function")
+async def mongo_client():
+    # create a mongoDB client for the tests and then clean it after the tests
+    client = AsyncIOMotorClient(TEST_MONGO_URI)
+    db = client[TESTE_DB_NAME]
+    yield db
+    await client.drop_database(TESTE_DB_NAME)
+    client.close() 
 
 @pytest.fixture(scope="function")
 def db_session():
