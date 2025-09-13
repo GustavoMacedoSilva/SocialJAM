@@ -6,12 +6,19 @@ from app.api.routes_user import router as user_router
 from app.api.routes_artist import router as artist_router
 from app import models
 from app.database import engine
+from app.core.mongo import connect_mongo, disconnet_mongo
 
 
 app = FastAPI(
     title="SocialJAM",
     description="API para socializar baseado no seu gosto musical",
 )
+
+# connect to mongo db right after starting the server and disconnect before closing the server
+async def lifespan(app: FastAPI):
+    await connect_mongo()
+    yield
+    await disconnet_mongo()
 
 origins = [
     "http://localhost:5173"
