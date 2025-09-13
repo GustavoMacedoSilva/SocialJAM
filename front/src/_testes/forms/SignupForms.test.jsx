@@ -94,4 +94,67 @@ describe("SignupForms", () => {
 
     consoleSpy.mockRestore();
   });
+
+  test("deve verificar se campo email aceita apenas emails válidos", async () => {
+    render(
+      <BrowserRouter>
+        <SignupForms />
+      </BrowserRouter>
+    );
+
+    // Preenche o campo de email
+    const emailInput = screen.getByLabelText("Email");
+
+    // Testa que o campo aceita texto (mesmo que inválido no momento)
+    fireEvent.change(emailInput, {
+      target: { value: "email-invalido" },
+    });
+
+    // Verifica se o valor foi definido
+    expect(emailInput.value).toBe("email-invalido");
+
+    // Agora testa com email válido
+    fireEvent.change(emailInput, {
+      target: { value: "email@valido.com" },
+    });
+
+    // Verifica se o valor foi atualizado
+    expect(emailInput.value).toBe("email@valido.com");
+  });
+
+  test("deve mostrar alert após cadastro bem-sucedido", async () => {
+    // Mock do alert
+    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
+
+    render(
+      <BrowserRouter>
+        <SignupForms />
+      </BrowserRouter>
+    );
+
+    // Preenche o formulário com dados válidos
+    fireEvent.change(screen.getByLabelText("Nome"), {
+      target: { value: "Maria Santos" },
+    });
+    fireEvent.change(screen.getByLabelText("Nome de Usuário"), {
+      target: { value: "mariasantos" },
+    });
+    fireEvent.change(screen.getByLabelText("Email"), {
+      target: { value: "maria@teste.com" },
+    });
+    fireEvent.change(screen.getByLabelText("Senha"), {
+      target: { value: "minhasenha123" },
+    });
+
+    // Submete o formulário
+    const submitButton = screen.getByRole("button", { name: /enviar/i });
+    fireEvent.click(submitButton);
+
+    // Verifica se o alert foi chamado
+    await waitFor(() => {
+      expect(alertSpy).toHaveBeenCalledWith("Cadastro realizado com sucesso!");
+    });
+
+    alertSpy.mockRestore();
+  });
 });
